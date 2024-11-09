@@ -21,4 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/fornecedores', 'app.suppliers.index')->name('suppliers.index');
     Route::view('/fornecedores/novo', 'app.suppliers.create')->name('suppliers.create');
     Route::view('/fornecedores/{supplier}/editar', 'app.suppliers.edit')->name('suppliers.edit');
+
+    Route::view('/produtos', 'app.products.index')->name('products.index');
+    Route::view('/produtos/novo', 'app.products.create')->name('products.create');
+    Route::view('/produtos/{product}/editar', 'app.products.edit')->name('products.edit');
 });

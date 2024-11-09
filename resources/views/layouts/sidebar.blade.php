@@ -26,11 +26,9 @@
 
                         <div class="nav__dropdown-collapse">
                             <div class="nav__dropdown-content">
-                                {{-- Pessoas --}}
                                 <a href="{{ route('customers.index') }}" class="nav__dropdown-item">Clientes</a>
                                 <a href="{{ route('suppliers.index') }}" class="nav__dropdown-item">Fornecedores</a>
-                                {{-- Produtos --}}
-                                <a href="#" class="nav__dropdown-item">Produtos</a>
+                                <a href="{{ route('products.index') }}" class="nav__dropdown-item">Produtos</a>
                                 <a href="#" class="nav__dropdown-item">Marcas</a>
                                 <a href="#" class="nav__dropdown-item">Categorias</a>
                                 <a href="#" class="nav__dropdown-item">Cores</a>
