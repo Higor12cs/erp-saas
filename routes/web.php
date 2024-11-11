@@ -25,4 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::view('/produtos', 'app.products.index')->name('products.index');
     Route::view('/produtos/novo', 'app.products.create')->name('products.create');
     Route::view('/produtos/{product}/editar', 'app.products.edit')->name('products.edit');
+
+    Route::view('/pedidos', 'app.orders.index')->name('orders.index');
+    Route::view('/pedidos/novo', 'app.orders.create')->name('orders.create');
+    Route::view('/pedidos/{order}/editar', 'app.orders.edit')->name('orders.edit');
 });

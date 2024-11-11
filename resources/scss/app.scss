@@ -53,16 +53,6 @@ $breadcrumb-divider: quote(">");
     --z-fixed: 100;
 }
 
-// Select2
-.select2-container {
-    z-index: 100000;
-}
-
-.form-control:focus,
-.form-select:focus {
-    box-shadow: none;
-}
-
 /*========== BASE ==========*/
 *,
 ::before,
@@ -354,4 +344,30 @@ img {
             opacity: 1;
         }
     }
+}
+
+// Select2
+.select2-container {
+    z-index: 1;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+}
+
+.select2-selection__rendered {
+    line-height: 38px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px !important;
+}
+
+.select2-selection__arrow {
+    height: 38px !important;
+}
+
+.select2-container--open {
+    z-index: 1;
 }

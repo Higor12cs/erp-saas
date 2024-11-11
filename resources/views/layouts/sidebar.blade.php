@@ -39,10 +39,20 @@
                 </div>
 
                 <div class="nav__items">
-                    <a href="#" class="nav__link">
-                        <i class='bx bx-shopping-bag nav__icon'></i>
-                        <span class="nav__name">Vendas</span>
-                    </a>
+                    <div class="nav__dropdown">
+                        <a href="#" class="nav__link">
+                            <i class='bx bx-shopping-bag nav__icon'></i>
+                            <span class="nav__name">Vendas</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
+
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
+                                <a href="{{ route('orders.index') }}" class="nav__dropdown-item">Pedidos</a>
+                                <a href="#" class="nav__dropdown-item">Condicionais</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="nav__items">
