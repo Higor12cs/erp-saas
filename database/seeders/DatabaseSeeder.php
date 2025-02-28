@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Tenant;
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,10 +18,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Acme Corporation',
         ]);
 
-        $tenant->users()->create([
+        DB::table('users')->insert([
+            'id' => \Illuminate\Support\Str::uuid(),
+            'tenant_id' => $tenant->id,
+            'sequential_id' => 1,
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'email_verified_at' => now(),
             'password' => bcrypt('password'),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

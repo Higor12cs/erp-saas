@@ -20,7 +20,7 @@ class UserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user)],
         ];
 
-        if (!$this->user) {
+        if (! $this->user) {
             $rules['password'] = ['required', 'confirmed', Password::defaults()];
         }
 

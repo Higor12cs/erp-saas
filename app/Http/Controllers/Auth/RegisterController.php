@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +12,14 @@ class RegisterController extends Controller
     public function __invoke(Request $request)
     {
         $request->validate([
+            'tenant_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
+            'tenant_name.required' => 'O campo nome da empresa é obrigatório.',
+            'tenant_name.string' => 'O campo nome da empresa deve ser uma string.',
+            'tenant_name.max' => 'O campo nome da empresa deve ter no máximo 255 caracteres.',
             'name.required' => 'O campo nome é obrigatório.',
             'name.string' => 'O campo nome deve ser uma string.',
             'name.max' => 'O campo nome deve ter no máximo 255 caracteres.',
@@ -30,7 +34,16 @@ class RegisterController extends Controller
             'password.confirmed' => 'O campo senha não confere com a confirmação.',
         ]);
 
-        $user = User::create($request->only('name', 'email', 'password'));
+        $tenant = Tenant::create([
+            'name' => $request->input('tenant_name'),
+            'trial_ends_at' => now()->addDays(30),
+        ]);
+
+        $user = $tenant->users()->create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
 
         Auth::login($user);
 

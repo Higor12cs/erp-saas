@@ -10,17 +10,17 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', fn() => Inertia::render('Auth/Login'))->name('login');
+    Route::get('/login', fn () => Inertia::render('Auth/Login'))->name('login');
     Route::post('/login', LoginController::class)->name('login.attempt');
-    Route::get('/register', fn() => Inertia::render('Auth/Register'))->name('register');
-    Route::post('/register', [UserController::class, 'store'])->name('register.attempt');
+    Route::get('/registrar', fn () => Inertia::render('Auth/Register'))->name('register');
+    Route::post('/registrar', [UserController::class, 'store'])->name('register.attempt');
 });
 
 Route::post('/logout', LogoutController::class)->name('logout')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', fn() => Inertia::render('Home/Index'))->name('home.index');
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard/Index'))->name('dashboard.index');
+    Route::get('/home', fn () => Inertia::render('Home/Index'))->name('home.index');
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard/Index'))->name('dashboard.index');
 
     Route::get('/clientes', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('/clientes/criar', [CustomerController::class, 'create'])->name('customers.create');
