@@ -3,6 +3,7 @@ import { Head, Link, useForm } from "@inertiajs/vue3";
 
 const form = useForm({
     tenant_name: "",
+    name: "",
     email: "",
     password: "",
     password_confirmation: "",
@@ -47,6 +48,29 @@ const submit = () => {
                             class="invalid-feedback"
                         >
                             {{ form.errors.tenant_name }}
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <input
+                                id="name"
+                                type="text"
+                                class="form-control"
+                                placeholder="Nome"
+                                v-model="form.name"
+                                required
+                                autofocus
+                            />
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            v-if="form.errors.name"
+                            class="invalid-feedback"
+                        >
+                            {{ form.errors.name }}
                         </div>
 
                         <div class="input-group mb-3">

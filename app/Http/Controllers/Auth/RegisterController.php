@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -39,11 +40,19 @@ class RegisterController extends Controller
             'trial_ends_at' => now()->addDays(30),
         ]);
 
-        $user = $tenant->users()->create([
+        DB::table('users')->insert([
+            'id' => \Illuminate\Support\Str::uuid(),
+            'tenant_id' => $tenant->id,
+            'sequential_id' => 1,
             'name' => $request->input('name'),
             'email' => $request->input('email'),
+            'email_verified_at' => now(),
             'password' => bcrypt($request->input('password')),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
+
+        $user = $tenant->users()->first();
 
         Auth::login($user);
 

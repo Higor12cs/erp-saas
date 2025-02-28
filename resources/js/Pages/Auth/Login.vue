@@ -113,7 +113,7 @@ const submit = () => {
                         <Link href="#">Esqueci minha senha</Link>
                     </p>
                     <p class="mb-0">
-                        <Link href="#" class="text-center">
+                        <Link :href="route('register')" class="text-center">
                             Registre uma nova conta
                         </Link>
                     </p>

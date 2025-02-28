@@ -112,13 +112,15 @@ const cancelDelete = () => {
                     >
                         <thead>
                             <tr>
+                                <th class="col-1">Código</th>
                                 <th class="col-5">Nome</th>
                                 <th class="col-5">Email</th>
-                                <th class="col-2">Ações</th>
+                                <th class="col-1">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="user in users.data" :key="user.id">
+                                <td>{{ String(user.sequential_id).padStart(6, '0') }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
                                 <td>
