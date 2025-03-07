@@ -8,10 +8,10 @@ import jQuery from "jquery";
 window.$ = window.jQuery = jQuery;
 
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
 import 'admin-lte/dist/js/adminlte.min.js';
-
 import 'icheck-bootstrap/icheck-bootstrap.min.css';
+
+import 'select2/dist/css/select2.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Ajax\SectionController as AjaxSectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -47,9 +51,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
     Route::get('/produtos/criar', [ProductController::class, 'create'])->name('products.create');
     Route::post('/produtos', [ProductController::class, 'store'])->name('products.store');
-    Route::get('/produtos/{product}/editar', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/produtos/{product}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/produtos/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/produtos/{product:sequential_id}/editar', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/produtos/{product:sequential_id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/produtos/{product:sequential_id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/marcas/criar', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('/marcas', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('/marcas/{brand:sequential_id}/editar', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::put('/marcas/{brand}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/marcas/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
+
+    Route::get('/secoes', [SectionController::class, 'index'])->name('sections.index');
+    Route::get('/secoes/criar', [SectionController::class, 'create'])->name('sections.create');
+    Route::post('/secoes', [SectionController::class, 'store'])->name('sections.store');
+    Route::get('/secoes/{section:sequential_id}/editar', [SectionController::class, 'edit'])->name('sections.edit');
+    Route::put('/secoes/{section}', [SectionController::class, 'update'])->name('sections.update');
+    Route::delete('/secoes/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
+
+    Route::get('/grupos', [GroupController::class, 'index'])->name('groups.index');
+    Route::get('/grupos/criar', [GroupController::class, 'create'])->name('groups.create');
+    Route::post('/grupos', [GroupController::class, 'store'])->name('groups.store');
+    Route::get('/grupos/{group:sequential_id}/editar', [GroupController::class, 'edit'])->name('groups.edit');
+    Route::put('/grupos/{group}', [GroupController::class, 'update'])->name('groups.update');
+    Route::delete('/grupos/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
+
+    Route::prefix('/api')->as('api.')->group(function(){
+        Route::get('/sections/search', [SectionController::class, 'search'])->name('sections.search');
+    });
 });
 
 Route::redirect('/', '/home');

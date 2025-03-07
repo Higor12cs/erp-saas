@@ -19,6 +19,7 @@
         "admin-lte": "3.2",
         "bootstrap": "^4.6.2",
         "husky": "^9.1.7",
-        "jquery": "^3.7.1"
+        "jquery": "^3.7.1",
+        "select2": "^4.1.0-rc.0"
     }
 }

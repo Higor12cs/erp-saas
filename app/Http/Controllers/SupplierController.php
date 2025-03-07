@@ -16,7 +16,7 @@ class SupplierController extends Controller
                     ->orWhere('legal_name', 'like', "%{$search}%");
             })
             ->latest()
-            ->paginate(5)
+            ->paginate(10)
             ->withQueryString();
 
         return inertia('Suppliers/Index', [

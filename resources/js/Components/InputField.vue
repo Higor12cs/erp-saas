@@ -24,6 +24,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    autofocus: {
+        type: Boolean,
+        default: false,
+    },
     error: {
         type: String,
         default: "",
@@ -47,6 +51,7 @@ const emit = defineEmits(["update:modelValue"]);
             @input="emit('update:modelValue', $event.target.value)"
             :placeholder="placeholder"
             :required="required"
+            :autofocus="autofocus"
         />
         <div v-if="error" class="invalid-feedback">
             {{ error }}

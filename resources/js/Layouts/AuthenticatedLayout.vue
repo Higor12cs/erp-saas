@@ -67,6 +67,32 @@ const sidebarItems = ref([
         label: "Produtos",
         permission: "products.view",
     },
+    {
+        type: "collapsible",
+        iconClass: "fas fa-tags",
+        label: "Atributos",
+        permission: "atributos.view",
+        subItems: [
+            {
+                routeName: "sections.index",
+                iconClass: "fas fa-tag",
+                label: "Seções",
+                permission: "sections.view",
+            },
+            {
+                routeName: "groups.index",
+                iconClass: "fas fa-tag",
+                label: "Grupos",
+                permission: "groups.view",
+            },
+            {
+                routeName: "brands.index",
+                iconClass: "fas fa-tag",
+                label: "Marcas",
+                permission: "brands.view",
+            },
+        ],
+    },
 ]);
 
 const hasPermission = (permission) => {
