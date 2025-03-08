@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', fn () => Inertia::render('Auth/Login'))->name('login');
+    Route::get('/login', fn() => Inertia::render('Auth/Login'))->name('login');
     Route::post('/login', LoginController::class)->name('login.attempt');
-    Route::get('/registrar', fn () => Inertia::render('Auth/Register'))->name('register');
+    Route::get('/registrar', fn() => Inertia::render('Auth/Register'))->name('register');
     Route::post('/registrar', RegisterController::class)->name('register.attempt');
 });
 
 Route::post('/logout', LogoutController::class)->name('logout')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', fn () => Inertia::render('Home/Index'))->name('home.index');
-    Route::get('/dashboard', fn () => Inertia::render('Dashboard/Index'))->name('dashboard.index');
+    Route::get('/home', fn() => Inertia::render('Home/Index'))->name('home.index');
+    Route::get('/dashboard', fn() => Inertia::render('Dashboard/Index'))->name('dashboard.index');
 
     Route::get('/clientes', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('/clientes/criar', [CustomerController::class, 'create'])->name('customers.create');
@@ -51,8 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/produtos/criar', [ProductController::class, 'create'])->name('products.create');
     Route::post('/produtos', [ProductController::class, 'store'])->name('products.store');
     Route::get('/produtos/{product:sequential_id}/editar', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/produtos/{product:sequential_id}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/produtos/{product:sequential_id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::put('/produtos/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/produtos/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/marcas/criar', [BrandController::class, 'create'])->name('brands.create');
@@ -76,7 +76,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/grupos/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
 
     Route::prefix('/api')->as('api.')->group(function () {
+        Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.search');
         Route::get('/sections/search', [SectionController::class, 'search'])->name('sections.search');
+        Route::get('/groups/search', [GroupController::class, 'search'])->name('groups.search');
     });
 });
 

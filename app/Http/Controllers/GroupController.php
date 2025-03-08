@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupRequest;
 use App\Models\Group;
+use Illuminate\Http\Request;
 
 class GroupController extends Controller
 {
@@ -64,5 +65,29 @@ class GroupController extends Controller
         $group->delete();
 
         return to_route('groups.index');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->has('ids')) {
+            $ids = explode(',', $request->ids);
+            $sections = Group::whereIn('id', $ids)
+                ->get(['id', 'name']);
+
+            return response()->json([
+                'data' => $sections,
+            ]);
+        }
+
+        $query = $request->search ?? '';
+
+        $sections = Group::query()
+            ->where('name', 'like', "%{$query}%")
+            ->limit(5)
+            ->get(['id', 'name']);
+
+        return response()->json([
+            'data' => $sections,
+        ]);
     }
 }

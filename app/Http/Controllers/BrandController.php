@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BrandRequest;
 use App\Models\Brand;
+use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
@@ -63,5 +64,29 @@ class BrandController extends Controller
         $brand->delete();
 
         return to_route('brands.index');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->has('ids')) {
+            $ids = explode(',', $request->ids);
+            $sections = Brand::whereIn('id', $ids)
+                ->get(['id', 'name']);
+
+            return response()->json([
+                'data' => $sections,
+            ]);
+        }
+
+        $query = $request->search ?? '';
+
+        $sections = Brand::query()
+            ->where('name', 'like', "%{$query}%")
+            ->limit(5)
+            ->get(['id', 'name']);
+
+        return response()->json([
+            'data' => $sections,
+        ]);
     }
 }
