@@ -160,13 +160,13 @@ const cancelDelete = () => {
             :visible="showDeleteModal"
             :loading="loading"
             title="Confirmar Exclusão"
-            message="Você tem certeza que deseja excluir estea classe?"
+            message="Você tem certeza que deseja excluir este grupo?"
             warning="Esta ação não pode ser desfeita."
             delete-route-method="delete"
             :delete-route="handleDelete"
             @cancel="cancelDelete"
             success-redirect="groups.index"
-            success-message="Seção excluída com sucesso!"
+            success-message="Grupo excluído com sucesso!"
         />
     </AuthenticatedLayout>
 </template>

@@ -106,10 +106,7 @@ const cancelDelete = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                v-for="brand in brands.data"
-                                :key="brand.id"
-                            >
+                            <tr v-for="brand in brands.data" :key="brand.id">
                                 <td>
                                     {{
                                         String(brand.sequential_id).padStart(
@@ -143,7 +140,7 @@ const cancelDelete = () => {
                             </tr>
                             <tr v-if="brands.data.length === 0">
                                 <td colspan="3" class="text-center">
-                                    Nenhuma classe encontrada.
+                                    Nenhuma marca encontrada.
                                 </td>
                             </tr>
                         </tbody>
@@ -161,7 +158,7 @@ const cancelDelete = () => {
             :visible="showDeleteModal"
             :loading="loading"
             title="Confirmar Exclusão"
-            message="Você tem certeza que deseja excluir estea classe?"
+            message="Você tem certeza que deseja excluir esta marca?"
             warning="Esta ação não pode ser desfeita."
             delete-route-method="delete"
             :delete-route="handleDelete"

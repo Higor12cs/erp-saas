@@ -143,7 +143,7 @@ const cancelDelete = () => {
                             </tr>
                             <tr v-if="sections.data.length === 0">
                                 <td colspan="3" class="text-center">
-                                    Nenhuma classe encontrada.
+                                    Nenhuma seção encontrada.
                                 </td>
                             </tr>
                         </tbody>
@@ -161,7 +161,7 @@ const cancelDelete = () => {
             :visible="showDeleteModal"
             :loading="loading"
             title="Confirmar Exclusão"
-            message="Você tem certeza que deseja excluir estea classe?"
+            message="Você tem certeza que deseja excluir esta seção?"
             warning="Esta ação não pode ser desfeita."
             delete-route-method="delete"
             :delete-route="handleDelete"
