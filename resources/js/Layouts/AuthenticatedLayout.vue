@@ -31,30 +31,18 @@ const sidebarItems = ref([
         label: "Cadastros",
     },
     {
-        type: "collapsible",
+        type: "link",
+        routeName: "customers.index",
         iconClass: "fas fa-users",
-        label: "Cadastros",
-        permission: "cadastros.view",
-        subItems: [
-            {
-                routeName: "customers.index",
-                iconClass: "fas fa-users",
-                label: "Clientes",
-                permission: "customers.view",
-            },
-            {
-                routeName: "suppliers.index",
-                iconClass: "fas fa-users",
-                label: "Fornecedores",
-                permission: "suppliers.view",
-            },
-            {
-                routeName: "users.index",
-                iconClass: "fas fa-users",
-                label: "Usuários",
-                permission: "users.view",
-            },
-        ],
+        label: "Clientes",
+        permission: "customers.view",
+    },
+    {
+        type: "link",
+        routeName: "suppliers.index",
+        iconClass: "fas fa-users",
+        label: "Fornecedores",
+        permission: "suppliers.view",
     },
     {
         type: "header",

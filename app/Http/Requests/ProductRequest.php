@@ -12,6 +12,25 @@ class ProductRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'cost' => $this->convertToNumber($this->cost),
+            'price' => $this->convertToNumber($this->price),
+        ]);
+        // dd($this->all());
+    }
+
+    private function convertToNumber($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        $value = str_replace(',', '.', $value);
+        return floatval(preg_replace('/[^\d.]/', '', $value));
+    }
+
     public function rules(): array
     {
         return [

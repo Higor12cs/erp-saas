@@ -1,14 +1,13 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, useForm, Link } from "@inertiajs/vue3";
+import { Head, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
-import InputField from "@/Components/InputField.vue";
+import SectionForm from "@/Pages/Sections/SectionForm.vue";
+import { ref } from "vue";
 
-const form = useForm({
-    name: "",
-});
+const formRef = ref(null);
 
-const submit = () => {
+const handleSubmit = (form) => {
     form.post(route("sections.store"));
 };
 </script>
@@ -27,7 +26,6 @@ const submit = () => {
                     ]"
                 />
             </div>
-
             <Link
                 :href="route('sections.index')"
                 class="btn btn-secondary mb-auto"
@@ -36,44 +34,14 @@ const submit = () => {
                 &nbsp; Voltar
             </Link>
         </div>
-
         <div class="card">
             <div class="card-header">Cadastro de Seção</div>
             <div class="card-body">
-                <form @submit.prevent="submit">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <InputField
-                                id="name"
-                                label="Nome"
-                                v-model="form.name"
-                                :error="form.errors.name"
-                                required
-                                autofocus
-                            />
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-3">
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                            :disabled="form.processing"
-                        >
-                            <span
-                                v-if="form.processing"
-                                class="spinner-border spinner-border-sm mr-2"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                            <span v-if="form.processing">Salvando...</span>
-                            <span v-else>
-                                <i class="fas fa-save"></i>
-                                &nbsp; Salvar
-                            </span>
-                        </button>
-                    </div>
-                </form>
+                <SectionForm
+                    ref="formRef"
+                    :processing="formRef?.form?.processing"
+                    @submit="handleSubmit"
+                />
             </div>
         </div>
     </AuthenticatedLayout>

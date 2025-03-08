@@ -3,16 +3,19 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy";
 
+// Importing third-party libraries
 import jQuery from "jquery";
 import Select2 from "select2";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "admin-lte/dist/js/adminlte.min.js";
 
+// Importing CSS files
 import "../css/app.css";
 import "icheck-bootstrap/icheck-bootstrap.min.css";
 import "select2/dist/css/select2.css";
 import "@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css";
 
+// Setting up jQuery and Select2
 window.$ = window.jQuery = jQuery;
 Select2($);
 

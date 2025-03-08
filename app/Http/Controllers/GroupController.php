@@ -71,23 +71,36 @@ class GroupController extends Controller
     {
         if ($request->has('ids')) {
             $ids = explode(',', $request->ids);
-            $sections = Group::whereIn('id', $ids)
-                ->get(['id', 'name']);
+            $groups = Group::with('section')
+                ->whereIn('id', $ids)
+                ->get();
 
             return response()->json([
-                'data' => $sections,
+                'data' => $groups->map(function (Group $group) {
+                    return [
+                        'id' => $group->id,
+                        'name' => $group->name . ' | ' . ($group->section ? $group->section->name : 'Sem Seção'),
+                        'section_id' => $group->section ? $group->section->id : null,
+                    ];
+                })
             ]);
         }
 
         $query = $request->search ?? '';
 
-        $sections = Group::query()
+        $groups = Group::with('section')
             ->where('name', 'like', "%{$query}%")
-            ->limit(5)
-            ->get(['id', 'name']);
+            ->limit(10)
+            ->get();
 
         return response()->json([
-            'data' => $sections,
+            'data' => $groups->map(function (Group $group) {
+                return [
+                    'id' => $group->id,
+                    'name' => $group->name . ' | ' . ($group->section ? $group->section->name : 'Sem Seção'),
+                    'section_id' => $group->section ? $group->section->id : null,
+                ];
+            })
         ]);
     }
 }
