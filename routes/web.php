@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\Ajax\SectionController as AjaxSectionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GroupController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -76,7 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/grupos/{group}', [GroupController::class, 'update'])->name('groups.update');
     Route::delete('/grupos/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
 
-    Route::prefix('/api')->as('api.')->group(function(){
+    Route::prefix('/api')->as('api.')->group(function () {
         Route::get('/sections/search', [SectionController::class, 'search'])->name('sections.search');
     });
 });

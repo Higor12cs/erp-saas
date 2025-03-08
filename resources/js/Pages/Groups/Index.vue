@@ -101,15 +101,13 @@ const cancelDelete = () => {
                         <thead>
                             <tr>
                                 <th class="col-1">Código</th>
-                                <th class="col-10">Nome</th>
+                                <th class="col-5">Nome</th>
+                                <th class="col-5">Seção</th>
                                 <th class="col-1">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                v-for="group in groups.data"
-                                :key="group.id"
-                            >
+                            <tr v-for="group in groups.data" :key="group.id">
                                 <td>
                                     {{
                                         String(group.sequential_id).padStart(
@@ -119,6 +117,7 @@ const cancelDelete = () => {
                                     }}
                                 </td>
                                 <td>{{ group.name }}</td>
+                                <td>{{ group.section.name }}</td>
                                 <td>
                                     <div class="text-nowrap">
                                         <Link
@@ -142,8 +141,8 @@ const cancelDelete = () => {
                                 </td>
                             </tr>
                             <tr v-if="groups.data.length === 0">
-                                <td colspan="3" class="text-center">
-                                    Nenhuma classe encontrada.
+                                <td colspan="4" class="text-center">
+                                    Nenhum grupo encontrado.
                                 </td>
                             </tr>
                         </tbody>

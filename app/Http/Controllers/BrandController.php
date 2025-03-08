@@ -65,4 +65,3 @@ class BrandController extends Controller
         return to_route('brands.index');
     }
 }
-

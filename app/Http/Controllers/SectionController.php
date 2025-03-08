@@ -68,11 +68,25 @@ class SectionController extends Controller
 
     public function search(Request $request)
     {
-        $sections = Section::query()
-            ->where('name', 'like', "%{$request->search}%")
-            ->get();
+        if ($request->has('ids')) {
+            $ids = explode(',', $request->ids);
+            $sections = Section::whereIn('id', $ids)
+                ->get(['id', 'name']);
 
-        return response()->json($sections);
+            return response()->json([
+                'data' => $sections,
+            ]);
+        }
+
+        $query = $request->search ?? '';
+
+        $sections = Section::query()
+            ->where('name', 'like', "%{$query}%")
+            ->limit(5)
+            ->get(['id', 'name']);
+
+        return response()->json([
+            'data' => $sections,
+        ]);
     }
 }
-

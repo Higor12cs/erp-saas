@@ -3,14 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm, Link } from "@inertiajs/vue3";
 import Breadcrumb from "@/Components/Breadcrumb.vue";
 import InputField from "@/Components/InputField.vue";
-import SearchSelect from "@/Components/SearchSelect.vue";
-
-defineProps({
-    sections: {
-        type: Object,
-        required: true,
-    },
-});
+import Select2 from "@/Components/Select2.vue";
 
 const form = useForm({
     section_id: null,
@@ -22,7 +15,7 @@ const submit = () => {
 };
 
 function handleSectionChange(value) {
-    console.log("Seção:", value);
+    // console.log("Seção:", value);
 }
 </script>
 
@@ -63,10 +56,9 @@ function handleSectionChange(value) {
                             />
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-12">
-                            <SearchSelect
+                            <Select2
                                 label="Seção"
                                 v-model="form.section_id"
                                 :error="form.errors.section_id"
@@ -74,12 +66,10 @@ function handleSectionChange(value) {
                                 value-key="id"
                                 label-key="name"
                                 placeholder="Pesquisar"
-                                required
                                 @change="handleSectionChange"
                             />
                         </div>
                     </div>
-
                     <div class="d-flex justify-content-end mt-3">
                         <button
                             type="submit"

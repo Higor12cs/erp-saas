@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupRequest;
 use App\Models\Group;
-use App\Models\Section;
 
 class GroupController extends Controller
 {
     public function index()
     {
         $groups = Group::query()
+            ->with('section')
             ->when(request('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -26,13 +26,7 @@ class GroupController extends Controller
 
     public function create()
     {
-        $sections = Section::query()
-            ->orderBy('name')
-            ->get();
-
-        return inertia('Groups/Create', [
-            'sections' => $sections,
-        ]);
+        return inertia('Groups/Create');
     }
 
     public function store(GroupRequest $request)
@@ -72,4 +66,3 @@ class GroupController extends Controller
         return to_route('groups.index');
     }
 }
-
