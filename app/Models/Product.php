@@ -14,6 +14,11 @@ class Product extends Model
 
     protected $guarded = [];
 
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class);

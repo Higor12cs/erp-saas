@@ -8,6 +8,7 @@ import NavItemCollapsible from "@/Components/NavItemCollapsible.vue";
 const currentTime = ref("");
 
 const sidebarItems = ref([
+    // Início
     {
         type: "header",
         label: "Início",
@@ -26,6 +27,8 @@ const sidebarItems = ref([
         label: "Dashboard",
         permission: "dashboard.view",
     },
+
+    // Cadastros
     {
         type: "header",
         label: "Cadastros",
@@ -44,6 +47,21 @@ const sidebarItems = ref([
         label: "Fornecedores",
         permission: "suppliers.view",
     },
+
+    // Vendas
+    {
+        type: "header",
+        label: "Vendas",
+    },
+    {
+        type: "link",
+        routeName: "orders.index",
+        iconClass: "fas fa-shopping-basket",
+        label: "Pedidos",
+        permission: "orders.view",
+    },
+
+    // Estoque
     {
         type: "header",
         label: "Estoque",

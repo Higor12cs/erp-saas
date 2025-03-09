@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
@@ -65,5 +66,35 @@ class CustomerController extends Controller
         $customer->delete();
 
         return to_route('customers.index');
+    }
+
+    public function search(Request $request)
+    {
+        if ($request->has('ids')) {
+            $ids = explode(',', $request->ids);
+            $customers = Customer::whereIn('id', $ids)->get();
+            return response()->json([
+                'data' => $customers->map(function (Customer $customer) {
+                    return [
+                        'id' => $customer->id,
+                        'name' => $customer->first_name,
+                    ];
+                })
+            ]);
+        }
+
+        $query = $request->search ?? '';
+        $customers = Customer::where('first_name', 'like', "%{$query}%")
+            ->limit(10)
+            ->get();
+
+        return response()->json([
+            'data' => $customers->map(function (Customer $customer) {
+                return [
+                    'id' => $customer->id,
+                    'name' => $customer->first_name,
+                ];
+            })
+        ]);
     }
 }

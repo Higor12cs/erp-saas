@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SupplierController;
@@ -75,10 +76,23 @@ Route::middleware('auth')->group(function () {
     Route::put('/grupos/{group}', [GroupController::class, 'update'])->name('groups.update');
     Route::delete('/grupos/{group}', [GroupController::class, 'destroy'])->name('groups.destroy');
 
+    Route::get('/pedidos', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/pedidos/criar', [OrderController::class, 'create'])->name('orders.create');
+    Route::post('/pedidos', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/pedidos/{order:sequential_id}/editar', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/pedidos/{order}', [OrderController::class, 'update'])->name('orders.update');
+    Route::delete('/pedidos/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+
     Route::prefix('/api')->as('api.')->group(function () {
+        Route::get('/customers/search', [CustomerController::class, 'search'])->name('customers.search');
+        Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+
         Route::get('/brands/search', [BrandController::class, 'search'])->name('brands.search');
         Route::get('/sections/search', [SectionController::class, 'search'])->name('sections.search');
         Route::get('/groups/search', [GroupController::class, 'search'])->name('groups.search');
+
+        Route::get('/orders/search', [OrderController::class, 'search'])->name('orders.search');
     });
 });
 
