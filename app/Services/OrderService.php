@@ -50,8 +50,6 @@ class OrderService
             }
         }
 
-        $orderDiscount = $orderDiscount;
-        $orderFees = $orderFees;
         $finalTotalPrice = $totalPrice - $orderDiscount + $orderFees;
 
         return [
