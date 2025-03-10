@@ -161,7 +161,14 @@ onMounted(() => {
                                         v-for="(item, index) in order.items"
                                         :key="item.id"
                                     >
-                                        <td>{{ index + 1 }}</td>
+                                        <td>
+                                            {{
+                                                String(index + 1).padStart(
+                                                    3,
+                                                    "0"
+                                                )
+                                            }}
+                                        </td>
                                         <td>
                                             {{
                                                 productInfo[item.product_id]
@@ -189,7 +196,7 @@ onMounted(() => {
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">Resumo do Pedido</div>
-                    <div class="card-body">
+                    <div class="card-body px-0">
                         <table class="table">
                             <tbody>
                                 <tr>
@@ -216,12 +223,12 @@ onMounted(() => {
                                         {{ formatCurrency(order.fees) }}
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td><strong>Custo Total:</strong></td>
                                     <td class="text-right">
                                         {{ formatCurrency(order.total_cost) }}
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr class="table-active">
                                     <td><strong>Total:</strong></td>
                                     <td class="text-right">

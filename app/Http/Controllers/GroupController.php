@@ -79,10 +79,10 @@ class GroupController extends Controller
                 'data' => $groups->map(function (Group $group) {
                     return [
                         'id' => $group->id,
-                        'name' => $group->name . ' | ' . ($group->section ? $group->section->name : 'Sem Seção'),
+                        'name' => $group->name.' | '.($group->section ? $group->section->name : 'Sem Seção'),
                         'section_id' => $group->section ? $group->section->id : null,
                     ];
-                })
+                }),
             ]);
         }
 
@@ -97,10 +97,10 @@ class GroupController extends Controller
             'data' => $groups->map(function (Group $group) {
                 return [
                     'id' => $group->id,
-                    'name' => $group->name . ' | ' . ($group->section ? $group->section->name : 'Sem Seção'),
+                    'name' => $group->name.' | '.($group->section ? $group->section->name : 'Sem Seção'),
                     'section_id' => $group->section ? $group->section->id : null,
                 ];
-            })
+            }),
         ]);
     }
 }

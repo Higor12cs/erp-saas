@@ -74,6 +74,7 @@ class ProductController extends Controller
             $products = Product::with(['brand', 'group.section'])
                 ->whereIn('id', $ids)
                 ->get();
+
             return response()->json([
                 'data' => $products->map(function (Product $product) {
                     return [
@@ -86,7 +87,7 @@ class ProductController extends Controller
                         'group' => $product->group ? $product->group->name : null,
                         'section' => $product->group && $product->group->section ? $product->group->section->name : null,
                     ];
-                })
+                }),
             ]);
         }
 
@@ -109,7 +110,7 @@ class ProductController extends Controller
                     'group' => $product->group ? $product->group->name : null,
                     'section' => $product->group && $product->group->section ? $product->group->section->name : null,
                 ];
-            })
+            }),
         ]);
     }
 }

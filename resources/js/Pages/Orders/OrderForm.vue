@@ -11,13 +11,35 @@ const props = defineProps({
 
 const emit = defineEmits(["submit"]);
 
+const parseLocaleNumber = (value) => {
+    if (typeof value === "string") {
+        return parseFloat(value.replace(",", ".")) || 0;
+    }
+    return parseFloat(value) || 0;
+};
+
+const formatCurrency = (value) => {
+    const numValue = parseFloat(value) || 0;
+    return numValue.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+};
+
+const discountValue = ref(parseLocaleNumber(props.order?.discount || 0));
+const feesValue = ref(parseLocaleNumber(props.order?.fees || 0));
+const networkError = ref(false);
+const errorMessage = ref("");
+
 const form = useForm({
     issue_date:
         props.order?.issue_date?.slice(0, 10) ||
         new Date().toISOString().slice(0, 10),
     customer_id: props.order?.customer_id || "",
-    discount: Number(props.order?.discount || 0),
-    fees: Number(props.order?.fees || 0),
+    discount: props.order?.discount || 0,
+    fees: props.order?.fees || 0,
     observation: props.order?.observation || "",
     items: props.order?.items?.map((item) => ({
         id: item.id,
@@ -46,21 +68,28 @@ const selectedProductInfo = ref({});
 
 const subtotal = computed(() => {
     return form.items.reduce((sum, item) => {
-        return sum + Number(item.quantity) * Number(item.unit_price);
+        const quantity = parseLocaleNumber(item.quantity);
+        const unitPrice = parseLocaleNumber(item.unit_price);
+        return sum + quantity * unitPrice;
     }, 0);
 });
 
 const total = computed(() => {
-    return subtotal.value - Number(form.discount) + Number(form.fees);
+    return subtotal.value - discountValue.value + feesValue.value;
+});
+
+const formattedTotal = computed(() => {
+    return formatCurrency(total.value);
 });
 
 const getItemTotal = (item) => {
-    const quantity = Number(item.quantity);
-    const unitPrice = Number(item.unit_price);
-    const discount = Number(item.discount || 0);
-    const fees = Number(item.fees || 0);
+    const quantity = parseLocaleNumber(item.quantity);
+    const unitPrice = parseLocaleNumber(item.unit_price);
+    const discount = parseLocaleNumber(item.discount);
+    const fees = parseLocaleNumber(item.fees);
 
-    return (quantity * unitPrice - discount + fees).toFixed(2);
+    const totalValue = quantity * unitPrice - discount + fees;
+    return formatCurrency(totalValue);
 };
 
 const addItem = () => {
@@ -77,32 +106,47 @@ const fetchProductDetails = async (productId, index) => {
     if (!productId) return;
 
     loading.value = true;
+    networkError.value = false;
+
     try {
         const response = await axios.get(route("api.products.search"), {
             params: { ids: productId },
+            timeout: 15000,
         });
 
         if (response.data.data.length > 0) {
             const product = response.data.data[0];
             selectedProductInfo.value[productId] = product;
-
-            form.items[index].unit_price = Number(product.price);
+            form.items[index].unit_price = parseFloat(product.price);
         }
     } catch (error) {
         console.error("Error fetching product details:", error);
+        if (error.code === "ECONNABORTED") {
+            errorMessage.value =
+                "A requisição excedeu o tempo limite. Tente novamente.";
+        } else {
+            errorMessage.value =
+                "Erro ao buscar detalhes do produto. Tente novamente.";
+        }
+        networkError.value = true;
     } finally {
         loading.value = false;
     }
 };
 
 const fetchInitialData = async () => {
-    if (props.order) {
+    if (!props.order) return;
+
+    networkError.value = false;
+
+    try {
         if (props.order.customer_id) {
             try {
                 const response = await axios.get(
                     route("api.customers.search"),
                     {
                         params: { ids: props.order.customer_id },
+                        timeout: 15000,
                     }
                 );
                 customers.value = response.data.data;
@@ -112,14 +156,15 @@ const fetchInitialData = async () => {
         }
 
         const productIds = props.order.items
-            .map((item) => item.product_id)
-            .filter((id) => id)
-            .join(",");
+            ?.map((item) => item.product_id)
+            ?.filter((id) => id)
+            ?.join(",");
 
         if (productIds) {
             try {
                 const response = await axios.get(route("api.products.search"), {
                     params: { ids: productIds },
+                    timeout: 15000,
                 });
 
                 products.value = response.data.data;
@@ -128,9 +173,21 @@ const fetchInitialData = async () => {
                     selectedProductInfo.value[product.id] = product;
                 });
             } catch (error) {
+                if (error.code === "ECONNABORTED") {
+                    errorMessage.value =
+                        "A requisição excedeu o tempo limite. Tente novamente mais tarde.";
+                } else {
+                    errorMessage.value =
+                        "Erro ao carregar produtos. Você pode continuar, mas os preços precisarão ser inseridos manualmente.";
+                }
+                networkError.value = true;
                 console.error("Error fetching products:", error);
             }
         }
+    } catch (error) {
+        console.error("Error in fetchInitialData:", error);
+        errorMessage.value = "Erro ao carregar dados iniciais.";
+        networkError.value = true;
     }
 };
 
@@ -138,43 +195,59 @@ const submit = () => {
     emit("submit", form);
 };
 
+const retryFetchData = () => {
+    networkError.value = false;
+    fetchInitialData();
+};
+
 watch(
     () => form.items,
     () => {
         form.items.forEach((item, index) => {
-            form.items[index].quantity = Number(item.quantity);
-            form.items[index].unit_price = Number(item.unit_price);
-            form.items[index].discount = Number(item.discount || 0);
-            form.items[index].fees = Number(item.fees || 0);
+            form.items[index].quantity = parseLocaleNumber(item.quantity);
+            form.items[index].unit_price = parseLocaleNumber(item.unit_price);
+            form.items[index].discount = parseLocaleNumber(item.discount);
+            form.items[index].fees = parseLocaleNumber(item.fees);
         });
     },
     { deep: true }
 );
 
+watch(
+    () => form.discount,
+    (newVal) => {
+        discountValue.value = parseLocaleNumber(newVal);
+    }
+);
+
+watch(
+    () => form.fees,
+    (newVal) => {
+        feesValue.value = parseLocaleNumber(newVal);
+    }
+);
+
 onMounted(() => {
     fetchInitialData();
+    discountValue.value = parseLocaleNumber(form.discount);
+    feesValue.value = parseLocaleNumber(form.fees);
 });
 </script>
 
 <template>
     <form @submit.prevent="submit">
+        <div v-if="networkError" class="alert alert-warning mb-3">
+            <strong>{{ errorMessage }}</strong>
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary ml-2"
+                @click="retryFetchData"
+            >
+                Tentar Novamente
+            </button>
+        </div>
+
         <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="issue_date">Data de Emissão</label>
-                    <input
-                        id="issue_date"
-                        v-model="form.issue_date"
-                        type="date"
-                        class="form-control"
-                        :class="{ 'is-invalid': form.errors.issue_date }"
-                        required
-                    />
-                    <div class="invalid-feedback">
-                        {{ form.errors.issue_date }}
-                    </div>
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="customer">Cliente</label>
@@ -192,6 +265,22 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="issue_date">Emissão</label>
+                    <input
+                        id="issue_date"
+                        v-model="form.issue_date"
+                        type="date"
+                        class="form-control"
+                        :class="{ 'is-invalid': form.errors.issue_date }"
+                        required
+                    />
+                    <div class="invalid-feedback">
+                        {{ form.errors.issue_date }}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="mt-3">
@@ -205,7 +294,7 @@ onMounted(() => {
                         <tr>
                             <th style="width: 40%">Produto</th>
                             <th>Quantidade</th>
-                            <th>Preço Unit.</th>
+                            <th>Preço Unitário</th>
                             <th>Preço Total</th>
                             <th>Ações</th>
                         </tr>
@@ -263,7 +352,12 @@ onMounted(() => {
                                 />
                             </td>
                             <td>
-                                {{ getItemTotal(item) }}
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    readonly
+                                    :value="getItemTotal(item)"
+                                />
                             </td>
                             <td>
                                 <button
@@ -282,7 +376,7 @@ onMounted(() => {
                             <td colspan="7">
                                 <button
                                     type="button"
-                                    class="btn btn-sm btn-default"
+                                    class="btn btn-sm btn-info"
                                     @click="addItem"
                                 >
                                     <i class="fas fa-plus"></i>
@@ -301,7 +395,7 @@ onMounted(() => {
                     <label for="discount">Desconto Total</label>
                     <InputField
                         id="discount"
-                        v-model.number="form.discount"
+                        v-model="form.discount"
                         maskType="currency"
                         :error="form.errors.discount"
                     />
@@ -312,7 +406,7 @@ onMounted(() => {
                     <label for="fees">Taxas Adicionais</label>
                     <InputField
                         id="fees"
-                        v-model.number="form.fees"
+                        v-model="form.fees"
                         maskType="currency"
                         :error="form.errors.fees"
                     />
@@ -324,7 +418,7 @@ onMounted(() => {
                     <input
                         type="text"
                         class="form-control"
-                        :value="total.toFixed(2)"
+                        :value="formattedTotal"
                         readonly
                     />
                 </div>

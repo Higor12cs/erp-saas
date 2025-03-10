@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    use HasFactory, HasUuids, BelongsToTenant, Sequential;
+    use BelongsToTenant, HasFactory, HasUuids, Sequential;
 
     protected $fillable = [
         'tenant_id',

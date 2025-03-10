@@ -18,7 +18,6 @@ class ProductRequest extends FormRequest
             'cost' => $this->convertToNumber($this->cost),
             'price' => $this->convertToNumber($this->price),
         ]);
-        // dd($this->all());
     }
 
     private function convertToNumber($value)
@@ -28,6 +27,7 @@ class ProductRequest extends FormRequest
         }
 
         $value = str_replace(',', '.', $value);
+
         return floatval(preg_replace('/[^\d.]/', '', $value));
     }
 
@@ -48,7 +48,6 @@ class ProductRequest extends FormRequest
     {
         $data = parent::validated();
 
-        $data['tenant_id'] = Auth::user()->tenant_id;
         $data['created_by'] = Auth::id();
 
         return $data;

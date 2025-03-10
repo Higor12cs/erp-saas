@@ -73,13 +73,14 @@ class CustomerController extends Controller
         if ($request->has('ids')) {
             $ids = explode(',', $request->ids);
             $customers = Customer::whereIn('id', $ids)->get();
+
             return response()->json([
                 'data' => $customers->map(function (Customer $customer) {
                     return [
                         'id' => $customer->id,
                         'name' => $customer->first_name,
                     ];
-                })
+                }),
             ]);
         }
 
@@ -94,7 +95,7 @@ class CustomerController extends Controller
                     'id' => $customer->id,
                     'name' => $customer->first_name,
                 ];
-            })
+            }),
         ]);
     }
 }
