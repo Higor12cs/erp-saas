@@ -58,9 +58,9 @@ const deleteOrder = (orderId) => {
                         <thead>
                             <tr>
                                 <th class="col-1">Código</th>
-                                <th class="col-4">Data</th>
-                                <th class="col-4">Total</th>
-                                <th class="col-2">Criado por</th>
+                                <th class="col-6">Cliente</th>
+                                <th class="col-2">Data</th>
+                                <th class="col-2">Valor</th>
                                 <th class="col-1">Ações</th>
                             </tr>
                         </thead>
@@ -74,12 +74,17 @@ const deleteOrder = (orderId) => {
                                         )
                                     }}
                                 </td>
+                                <td>{{ order.customer.first_name }}</td>
                                 <td>{{ formatDate(order.issue_date) }}</td>
                                 <td>{{ formatCurrency(order.total_price) }}</td>
-                                <td>{{ order.created_by?.name }}</td>
                                 <td class="text-nowrap">
                                     <Link
-                                        :href="route('orders.show', order.id)"
+                                        :href="
+                                            route(
+                                                'orders.show',
+                                                order.sequential_id
+                                            )
+                                        "
                                         class="btn btn-sm btn-secondary mr-1"
                                     >
                                         Visualizar
